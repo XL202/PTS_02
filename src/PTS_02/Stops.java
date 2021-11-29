@@ -5,6 +5,7 @@ import PTS_02.datatypes.*;
 import java.util.LinkedList;
 
 public class Stops implements StopsInterface {
+
     @Override
     public Pair<StopName,Time> earliestReachableStopAfter(Time time) {
         Pair<StopName,Time> tmp = new Pair<>(new StopName("abc"), new Time(123));

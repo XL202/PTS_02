@@ -2,8 +2,9 @@ package PTS_02;
 
 import PTS_02.datatypes.StopName;
 import PTS_02.datatypes.Time;
+import PTS_02.exceptions.FullCapacityException;
 
 public interface LineInterface {
     void updateReachable(Time time, StopName name);
-    void updateCapacityAndGetPreviousStop(StopName name, Time time);
+    StopName updateCapacityAndGetPreviousStop(StopName name, Time time) throws FullCapacityException;
 }

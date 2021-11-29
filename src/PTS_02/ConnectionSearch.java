@@ -6,6 +6,7 @@ import PTS_02.datatypes.Time;
 
 public class ConnectionSearch {
     public ConnectionData search(StopName from, StopName to, Time time) {
+
         return new ConnectionData();
     }
 }
