@@ -1,14 +1,15 @@
-package PTS_02;
+package PTS_02.datatypes;
 
 import java.util.Objects;
 
 public class LineName {
     private String lineName;
     public LineName(String lineName) {
+        if (lineName == null) throw new IllegalArgumentException("Name cannot be null.");
         this.lineName = lineName;
     }
-
-    public String getStopName() {
+    @Override
+    public String toString() {
         return lineName;
     }
 

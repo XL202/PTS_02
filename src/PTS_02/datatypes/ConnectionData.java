@@ -1,4 +1,4 @@
-package PTS_02;
+package PTS_02.datatypes;
 
 import java.util.LinkedList;
 

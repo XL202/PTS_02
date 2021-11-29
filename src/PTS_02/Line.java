@@ -1,10 +1,12 @@
 package PTS_02;
 
-import java.util.Collection;
-import java.util.Collections;
+import PTS_02.datatypes.LineName;
+import PTS_02.datatypes.StopName;
+import PTS_02.datatypes.Time;
+
 import java.util.LinkedList;
 
-public class Line {
+public class Line implements LineInterface {
     private LineName lineName;
     private LinkedList<Time> startTimes;
     private StopName startStop;
@@ -15,4 +17,13 @@ public class Line {
     }
 
 
+    @Override
+    public void updateReachable(Time time, StopName name) {
+
+    }
+
+    @Override
+    public void updateCapacityAndGetPreviousStop(StopName name, Time time) {
+
+    }
 }

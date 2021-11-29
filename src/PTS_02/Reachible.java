@@ -1,10 +1,14 @@
 package PTS_02;
 
+import PTS_02.datatypes.LineName;
+import PTS_02.datatypes.StopName;
+import PTS_02.datatypes.Time;
+
 public class Reachible {
     private StopName from;
-    private TimeDiff diff;
+    private Time.TimeDiff diff;
     private LineName by;
-    public Reachible(StopName from, TimeDiff diff, LineName by) {
+    public Reachible(StopName from, Time.TimeDiff diff, LineName by) {
         this.from = from;
         this.diff = diff;
         this.by = by;
@@ -18,7 +22,7 @@ public class Reachible {
         return from;
     }
 
-    public TimeDiff getDiff() {
+    public Time.TimeDiff getDiff() {
         return diff;
     }
 }

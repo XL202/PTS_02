@@ -1,0 +1,2 @@
+Stops		Blumental	Zochova		ZOO		Slavicie
+Time		5		8		2		*

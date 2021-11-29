@@ -1,0 +1,2 @@
+Stops		Hl.st.		Zochova		Aupark		Petrzalka	Vysehradska
+Time		5		2		3		9		*
