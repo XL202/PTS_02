@@ -1,2 +1,5 @@
-Hl.st.		Kramare		ZOO		Botanicka	Dlhe_Diely
-6		5		2		9		*
+Hl.st.				3	23	43	63
+Kramare		6	3	0	0	0	0
+ZOO		    11	3	0	0	0	0
+Botanicka	13	3	0	0	0	0
+Dlhe_Diely	22	3	0	0	0	0

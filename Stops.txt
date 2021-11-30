@@ -1,10 +1,10 @@
 Blumental	bus31
 Zochova		bus31	bus93
 ZOO		bus31	bus32
-Slavicie	bus31
+Slavicie
 Kramare		bus32
 Botanicka	bus32
-Dlhe_diely	bus32
+Dlhe_diely
 Aupark		bus93
 Petrzalka	bus93
 Vysehradska	

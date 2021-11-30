@@ -13,7 +13,7 @@ public class FileConnection {
     long lastDiffFromStart = 0;
     long currentDiffFromStart = 0;
     TimeDiff diff;
-    HashMap<Time,Integer> segmentCapacity;
+    HashMap<Time,Integer> currentCapacity;
     LinkedList<LineName> lines;
     LinkedList<StopInterface> stops;
 
@@ -83,11 +83,11 @@ public class FileConnection {
             currentDiffFromStart = row.nextLong();
             diff = new TimeDiff(currentDiffFromStart - lastDiffFromStart);
             int capacity = row.nextInt();
-            segmentCapacity = new HashMap<>();
+            currentCapacity = new HashMap<>();
             for (int i = 0; i < times.size(); i++) {
-                segmentCapacity.put(times.get(i), row.nextInt());
+                currentCapacity.put(times.get(i), row.nextInt());
             }
-            segments.add(new LineSegment(diff, nextStop, capacity, new LineName(lineName), segmentCapacity));
+            segments.add(new LineSegment(diff, nextStop, capacity, new LineName(lineName), currentCapacity));
         }
 //LineName lineName, LinkedList<Time> startTimes, StopName startStop, LinkedList<LineSegmentInterface> lineSegments
         line = new Line(new LineName(lineName), times, startStop, segments);

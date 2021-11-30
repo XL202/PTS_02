@@ -1,0 +1,12 @@
+[name]		[reachible_by_lines (list)]	|	[reachible_from] [time] [by_line] (list)
+Hl.st.		bus93	bus32			|	Hl.st. 0 bus93		Hl.st. 0 bus32
+Blumental	bus31				|	Blumental 0 bus31
+Zochova		bus31	bus93			|	Blumental 5 bus31	Hl.st. 5 bus93
+ZOO		bus31	bus32			|	Zochova 8 bus31		Kramare 5 bus32
+Slavicie	bus31				|	ZOO 2 bus31				
+Kramare		bus32				|	Hl.st. 6 bus32
+Botanicka	bus32				|	ZOO 2 bus32
+Dlhe_diely	bus32				|	Botanicka 9 bus32
+Aupark		bus93				|	Zochova 2 bus93
+Petrzalka	bus93				|	Aupark 3 bus93
+Vysehradska	bus93				|	Petrzalka 9 bus93
