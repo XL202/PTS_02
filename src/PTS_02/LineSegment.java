@@ -16,9 +16,8 @@ public class LineSegment implements LineSegmentInterface {
     private final LineName lineName;
     private final Map<Time, Integer> numberOfPassengers;
     private final HashMap<Time, Integer> updatedBusses = new HashMap<>();
-    private final int segmentIndex;
 
-    public LineSegment(TimeDiff timeToNextStop, StopInterface nextStop, int capacity, LineName lineName, HashMap<Time, Integer> numberOfPassengers, int segmentIndex) {
+    public LineSegment(TimeDiff timeToNextStop, StopInterface nextStop, int capacity, LineName lineName, HashMap<Time, Integer> numberOfPassengers) {
         if (capacity < 0) throw new IllegalArgumentException("Capacity cannot be negative.");
         this.timeToNextStop = timeToNextStop;
         //this.timeDifferenceFromStart = timeDiffFromStart;
@@ -26,7 +25,6 @@ public class LineSegment implements LineSegmentInterface {
         this.capacity = capacity;
         this.lineName = lineName;
         this.numberOfPassengers = new HashMap<>(numberOfPassengers);
-        this.segmentIndex = segmentIndex;
     }
 
     @Override

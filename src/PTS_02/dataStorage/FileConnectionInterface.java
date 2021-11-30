@@ -1,4 +1,4 @@
-package PTS_02;
+package PTS_02.dataStorage;
 
 import PTS_02.datatypes.LineName;
 import PTS_02.datatypes.StopName;

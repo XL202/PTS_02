@@ -1,2 +1,0 @@
-Stops	[linked list of stops]
-Time	[linked list of times, from current stop to next stop]

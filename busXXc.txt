@@ -1,2 +1,0 @@
-= [capacity to next stop]		
-[Starttime] [free capacity to next stop]

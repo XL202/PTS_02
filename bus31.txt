@@ -1,2 +1,4 @@
-Stops		Blumental	Zochova		ZOO		Slavicie
-Time		5		8		2		*
+Blumental			0	10	20	30	40
+Zochova		5	3	0	0	0	0	0
+ZOO		13	3	0	0	0	0	0
+Slavicie	15	3	0	0	0	0	0
