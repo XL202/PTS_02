@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.io.File;
 
-public class FileConnection {
+public class GetDataFromFile implements StopsFactoryInterface, LinesFactoryInterface {
     long lastDiffFromStart = 0;
     long currentDiffFromStart = 0;
     TimeDiff diff;
@@ -17,7 +17,7 @@ public class FileConnection {
     LinkedList<LineName> lines;
     LinkedList<StopInterface> stops;
 
-    public FileConnection(String stopSetName, String linesSetName) throws FileNotFoundException {
+    public GetDataFromFile(String stopSetName, String linesSetName) throws FileNotFoundException {
         lines = getLineNames(linesSetName);
         stops = getStops(stopSetName);
     }
@@ -47,9 +47,11 @@ public class FileConnection {
         sc.close();
         return stops;
     }
-    public StopInterface getStopByName(String name) {
+    @Override
+    public StopInterface getStopByName(StopName name) {
         for (int i = 0; i < stops.size(); i++) {
-            if (stops.get(i).getName().toString().equals(name)) return stops.get(i);
+
+            if (stops.get(i).getName().equals(name)) return stops.get(i);
         }
         return null;
     }
@@ -79,7 +81,7 @@ public class FileConnection {
         while(sc.hasNextLine()) {
             Scanner row = new Scanner(sc.nextLine());
 
-            nextStop = getStopByName(row.next());
+            nextStop = getStopByName(new StopName(row.next()));
             currentDiffFromStart = row.nextLong();
             diff = new TimeDiff(currentDiffFromStart - lastDiffFromStart);
             int capacity = row.nextInt();
@@ -94,5 +96,20 @@ public class FileConnection {
         sc.close();
 
         return line;
+    }
+
+    @Override
+    public LineInterface getLineByName(LineName lineName) {
+        return null;
+    }
+
+    @Override
+    public void createSegment(LineName lineName, int index) {
+
+    }
+
+    @Override
+    public void clearBuffer() {
+
     }
 }

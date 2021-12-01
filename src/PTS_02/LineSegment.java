@@ -14,7 +14,7 @@ public class LineSegment implements LineSegmentInterface {
     private final StopInterface nextStop;
     private final int capacity;
     private final LineName lineName;
-    private final Map<Time, Integer> numberOfPassengers;
+    private final HashMap<Time, Integer> numberOfPassengers;
     private final HashMap<Time, Integer> updatedBusses = new HashMap<>();
 
     public LineSegment(TimeDiff timeToNextStop, StopInterface nextStop, int capacity, LineName lineName, HashMap<Time, Integer> numberOfPassengers) {
@@ -28,9 +28,10 @@ public class LineSegment implements LineSegmentInterface {
     }
 
     @Override
-    public Pair<Time, StopName> nextStop(Time startTime) {
-        if (!numberOfPassengers.containsKey(startTime)) throw new NoSuchElementException("No match for bus at startTime.");
-        Time time = new Time(timeToNextStop.getTimeDiff() + startTime.getTime());
+    public Pair<Time, StopName> nextStop(Time startTimeOfSegment) {
+        //startTimeOfSegment - returns endSegmentTime
+        if (!numberOfPassengers.containsKey(startTimeOfSegment)) throw new NoSuchElementException("No match for bus at startTime.");
+        Time time = new Time(timeToNextStop.getTimeDiff() + startTimeOfSegment.getTime());
         return new Pair<>(time, nextStop.getName());
     }
 
@@ -54,7 +55,7 @@ public class LineSegment implements LineSegmentInterface {
     public TimeDiff getTimeToNextStop() {
         return timeToNextStop;
     }
-    public HashMap<Time, Integer> getUpdatedSegments() {
+    public HashMap<Time, Integer> getUpdatedBusses() {
         return updatedBusses;
     }
 }

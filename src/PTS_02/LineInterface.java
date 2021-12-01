@@ -5,8 +5,10 @@ import PTS_02.datatypes.StopName;
 import PTS_02.datatypes.Time;
 import PTS_02.exceptions.FullCapacityException;
 
+import java.util.LinkedList;
+
 public interface LineInterface {
     void updateReachable(Time time, StopName name);
     StopName updateCapacityAndGetPreviousStop(StopName name, Time time) throws FullCapacityException;
-
+    public LinkedList<LineSegmentInterface> getLineSegments();
 }
