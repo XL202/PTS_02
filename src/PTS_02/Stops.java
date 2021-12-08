@@ -1,11 +1,13 @@
 package PTS_02;
 
-import PTS_02.datatypes.*;
+import PTS_02.datatypes.LineName;
+import PTS_02.datatypes.Pair;
+import PTS_02.datatypes.StopName;
+import PTS_02.datatypes.Time;
 import PTS_02.exceptions.IncorrectUserInputException;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
 
 public class Stops implements StopsInterface {
     private final StopsFactoryInterface factory;
@@ -16,17 +18,16 @@ public class Stops implements StopsInterface {
     }
 
     @Override
-    public boolean setStartingStop(StopName stop, Time time) throws IncorrectUserInputException {
+    public void setStartingStop(StopName stop, Time time) throws IncorrectUserInputException {
         if (!stops.containsKey(stop)) {
             System.out.println("Stops.notContainsKey(stop): " + stop);
             loadStop(stop);
         }
         System.out.printf("stops.get(stop).update.reachableAt(time,name) [%s,%s,null]\n", stop, time.getTime());
         stops.get(stop).updateReachableAt(time, null);
-        return false;
     }
     @Override
-    public void loadStop(StopName stop) throws IncorrectUserInputException {
+    public void loadStop(StopName stop) {
         System.out.printf("loading stop '%s'\n",stop);
         try {
             if (stops.containsKey(stop)) throw new IllegalStateException("Stop has already been loaded.");

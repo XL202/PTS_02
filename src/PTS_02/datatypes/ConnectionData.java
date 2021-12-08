@@ -31,14 +31,14 @@ public class ConnectionData {
         StringBuilder sb = new StringBuilder();
         for (int i=travelSegments.size()-1; i>=0; i--) {
             Quadraplet<LineName, StopName, Time, TimeDiff> data = travelSegments.get(i);
-            sb.append("stop ").append(data.getSecond().toString());
-            sb.append(", use line ").append(data.getFirst().toString());
-            sb.append(", bus arrival at time ").append(data.getThird().toString());
-            sb.append(", segment travel time ").append(data.getFourth().toString());
+            sb.append("Stop: ").append(data.getSecond().toString());
+            sb.append(", by line: ").append(data.getFirst().toString());
+            sb.append(", arrival time of bus to stop: ").append(data.getThird().toString());
+            sb.append(", segment travel time: ").append(data.getFourth().getTimeDiff());
             sb.append(";\n");
         }
-        sb.append("stop ").append(lastStop.toString());
-        sb.append(", destination;\n");
+        sb.append("Last stop: ").append(lastStop.toString());
+        sb.append("\n");
         return sb.toString();
     }
 

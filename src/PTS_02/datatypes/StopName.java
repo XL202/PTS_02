@@ -3,7 +3,7 @@ package PTS_02.datatypes;
 import java.util.Objects;
 
 public class StopName {
-    private String stopName;
+    private final String stopName;
     public StopName(String stopName) {
         if (stopName == null) throw new IllegalArgumentException("Name cannot be null.");
         this.stopName = stopName;

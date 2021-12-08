@@ -4,7 +4,6 @@ import PTS_02.datatypes.*;
 import PTS_02.exceptions.FullCapacityException;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 public class LineSegment implements LineSegmentInterface {
@@ -76,8 +75,7 @@ public class LineSegment implements LineSegmentInterface {
 
     public boolean isPossibleToIncrementCapacity(Time endTime) {
         if (!numberOfPassengers.containsKey(endTime)) throw new NoSuchElementException("No match for bus at startTime.");
-        if (numberOfPassengers.get(endTime) + 1 > capacity) return false;
-        else return true;
+        return numberOfPassengers.get(endTime) + 1 <= capacity;
     }
     public TimeDiff getTimeToNextStop() {
         return timeToNextStop;
@@ -87,6 +85,6 @@ public class LineSegment implements LineSegmentInterface {
     }
     public String toString() {
 
-        return "[TimeToNextStop: " + timeToNextStop.getTimeDiff() + "; NextStop: " + nextStop.getName() + "; Capacity:" + capacity + "; LineName: " + lineName.toString() + "; NumberOfPassangers: "+ numberOfPassengers.toString() + "]\n";
+        return "[TimeToNextStop: " + timeToNextStop.getTimeDiff() + "; NextStop: " + nextStop.getName() + "; Capacity:" + capacity + "; LineName: " + lineName.toString() + "; NumberOfPassangers: "+ numberOfPassengers + "]\n";
     }
 }

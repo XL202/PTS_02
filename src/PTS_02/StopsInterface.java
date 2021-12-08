@@ -11,7 +11,7 @@ import java.util.LinkedList;
 public interface StopsInterface {
     Pair<LinkedList<StopName>, Time> earliestReachableStopAfter(Time time);
 
-    boolean setStartingStop(StopName stop, Time time) throws IncorrectUserInputException;
+    void setStartingStop(StopName stop, Time time) throws IncorrectUserInputException;
 
     LinkedList<LineName> getLines(StopName stop) throws IncorrectUserInputException;
 

@@ -28,7 +28,7 @@ public class Lines implements LinesInterface{
                 LineInterface newLine = factory.getLineByName(line);
                 if (newLine == null) throw new IncorrectUserInputException("No such line in database.");
                 //System.out.println(newLine.getLineSegments());
-                System.out.println("loaded line: " + newLine.toString());
+                System.out.println("loaded line: " + newLine);
                 System.out.println("line's start times: " + newLine.getStartTimes());
                 System.out.println("line's segments" + newLine.getLineSegments());
 
@@ -56,7 +56,7 @@ public class Lines implements LinesInterface{
         return factory.getLineByName(line);
     }
     @Override
-    public void updateReachable(LinkedList<LineName> lines, StopName stop, Time time) throws IncorrectUserInputException, FileNotFoundException {
+    public void updateReachable(LinkedList<LineName> lines, StopName stop, Time time) throws FileNotFoundException {
         System.out.printf("lines.updateReachable(lines,AtStop,Time): [%s, %s, %s]\n",lines.toString(), stop, time.getTime());
         for (LineName line : lines) {
             System.out.printf("loading line '%s'\n",line.toString());
@@ -71,9 +71,9 @@ public class Lines implements LinesInterface{
     }
 
     @Override
-    public Triplet<StopName, Time, TimeDiff> updateCapacityAndGetPreviousStop(LineName line, StopName stop, Time busStartTime) throws FullCapacityException, IncorrectUserInputException, FileNotFoundException {
+    public Triplet<StopName, Time, TimeDiff> updateCapacityAndGetPreviousStop(LineName line, StopName stop, Time busStartTime) throws FullCapacityException {
 
-        if (!lines.keySet().contains(line)) throw new NoSuchElementException("Line has not been loaded yet.");
+        if (!lines.containsKey(line)) throw new NoSuchElementException("Line has not been loaded yet.");
         System.out.println("OK");
         return lines.get(line).updateCapacityAndGetPreviousStop(stop, busStartTime);
     }

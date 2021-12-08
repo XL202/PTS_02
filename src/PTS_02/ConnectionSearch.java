@@ -1,6 +1,5 @@
 package PTS_02;
 
-import PTS_02.dataStorage.GetDataFromFile;
 import PTS_02.datatypes.*;
 import PTS_02.exceptions.FullCapacityException;
 import PTS_02.exceptions.IncorrectUserInputException;
@@ -18,7 +17,7 @@ public class ConnectionSearch {
         this.lines = lines;
     }
 
-    public ConnectionData search(StopName from, StopName to, Time time) {
+    public void search(StopName from, StopName to, Time time) {
         System.out.println("From: " + from +  "; To: " + to + "; Time: " + time.getTime());
         try {
             System.out.printf("stops.setStartingStop(from, time): [%s;%s]\n", from, time.getTime());
@@ -32,10 +31,10 @@ public class ConnectionSearch {
                     LinkedList<LineName> stopLines = stops.getLines(tmpStop);
                     LinkedList<StopName> stopNames;
                     System.out.printf("stops.getLines(tmpStop): [%s, %s]\n", tmpStop.toString(), stopLines);
-                    for(int i=0; i<stopLines.size(); i++) {
-                        stopNames = lines.getLineByLineName(stopLines.get(i)).getStopsOnThisLine();
-                        for(int j=0; j<stopNames.size(); j++) {
-                            if (!stops.isLoaded(stopNames.get(j))) stops.loadStop(stopNames.get(j));
+                    for (LineName stopLine : stopLines) {
+                        stopNames = lines.getLineByLineName(stopLine).getStopsOnThisLine();
+                        for (StopName stopName : stopNames) {
+                            if (!stops.isLoaded(stopName)) stops.loadStop(stopName);
                         }
                     }
 
@@ -54,7 +53,7 @@ public class ConnectionSearch {
                 System.out.println("=> " + data.getFirst() + " " + data.getSecond());
                 if (data == null) {
                     System.out.println("No connection has been found");
-                    return null;
+                    return;
                 }
                 earliestStops.addAll(data.getFirst());
                 System.out.println(data.getFirst());
@@ -80,11 +79,8 @@ public class ConnectionSearch {
 
             lines.saveUpdatedLineSegments();
 
-            return result;
-
         } catch (IncorrectUserInputException | FullCapacityException | FileNotFoundException e) {
             System.out.println("Incorrect user input: " + e.getMessage());
-            return null;
 
         } finally {
             lines.clean();

@@ -77,7 +77,7 @@ public class Line implements LineInterface {
         for(int i=0; i<startTimes.size(); i++) {
             startTime = new Time(startTimes.get(i).getTime());
             System.out.printf("start_times: %s\n",startTimes.get(i).getTime());
-            for(int j=0; j<lineSegments.size(); j++) {
+            for (LineSegmentInterface lineSegment : lineSegments) {
 
                 //System.out.println(startTime);
                 /*Pair<Time, StopName> tmp = lineSegments.get(j).nextStop(time);
@@ -88,14 +88,13 @@ public class Line implements LineInterface {
                     return new Triplet<>(previousStop,time,lastTimeDiff);
                 }*/
 
-                Pair<Time, StopName> tmp = lineSegments.get(j).nextStop(time);
+                Pair<Time, StopName> tmp = lineSegment.nextStop(time);
                 if (tmp.getSecond() == name) {
                     Pair<Time, StopName> data = lineSegments.get(i).nextStop(startTime);
-                    lineSegments.get(j).incrementCapacity(startTime);
+                    lineSegment.incrementCapacity(startTime);
                     lastTimeDiff = new TimeDiff(data.getFirst().getTime() - startTimes.get(i).getTime());
-                    return new Triplet<>(previousStop,time,lastTimeDiff);
-                }
-                else {
+                    return new Triplet<>(previousStop, time, lastTimeDiff);
+                } else {
                     previousStop = tmp.getSecond();
                 }
                 startTime = new Time(startTime.getTime() + lineSegments.get(i).getTimeToNextStop().getTimeDiff());

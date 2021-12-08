@@ -6,7 +6,6 @@ import PTS_02.datatypes.StopName;
 import PTS_02.datatypes.Time;
 import PTS_02.datatypes.TimeDiff;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -22,9 +21,14 @@ public class DataInMemory implements StopsFactoryInterface, LinesFactoryInterfac
         LinkedList<StopName> stopsName;
         stops = new LinkedList<>();
         lines = new LinkedList<>();
+        lines.add(createLineNameClass("bus93"));
+        lines.add(createLineNameClass("bus32"));
+        stops.add(new Stop(new StopName("Hl.st."), lines));
+        lines = new LinkedList<>();
         lines.add(createLineNameClass("bus31"));
         //31
         stops.add(new Stop(new StopName("Blumental"), lines));
+
         lines.add(createLineNameClass("bus93"));
         //31; 93
         stops.add(new Stop(new StopName("Zochova"), lines));
@@ -35,15 +39,17 @@ public class DataInMemory implements StopsFactoryInterface, LinesFactoryInterfac
         stops.add(new Stop(new StopName("ZOO"), lines));
         lines.removeLast();
         //31
-        stops.add(new Stop(new StopName("Slavicie"), lines));
         lines.removeLast();
+        stops.add(new Stop(new StopName("Slavicie"), lines));
+
         //
         lines.add(createLineNameClass("bus32"));
         //32
         stops.add(new Stop(new StopName("Kramare"), lines));
         stops.add(new Stop(new StopName("Botanicka"), lines));
-        stops.add(new Stop(new StopName("Dlhe_diely"), lines));
         lines.removeLast();
+        stops.add(new Stop(new StopName("DlheDiely"), lines));
+
         //
         lines.add(createLineNameClass("bus93"));
         //93
@@ -76,15 +82,26 @@ public class DataInMemory implements StopsFactoryInterface, LinesFactoryInterfac
         times.add(new Time(30));
         times.add(new Time(40));
         {
+            currentCapacity = new HashMap<>();
+            for (Time time : times) {
+                currentCapacity.put(new Time(time.getTime()+0), 0);
+            }
 
-
-            nextStop = getStopByName("Zochova");
+            nextStop = getStopByName(new StopName("Zochova"));
             segments.add(new LineSegment(new TimeDiff(5), nextStop, 3, createLineNameClass("Zochova"), currentCapacity));
 
-            nextStop = getStopByName("ZOO");
+            currentCapacity = new HashMap<>();
+            for (Time time : times) {
+                currentCapacity.put(new Time(time.getTime()+5), 0);
+            }
+            nextStop = getStopByName(new StopName("ZOO"));
             segments.add(new LineSegment(new TimeDiff(8), nextStop, 3, createLineNameClass("ZOO"), currentCapacity));
 
-            nextStop = getStopByName("Slavicie");
+            currentCapacity = new HashMap<>();
+            for (Time time : times) {
+                currentCapacity.put(new Time(time.getTime()+13), 0);
+            }
+            nextStop = getStopByName(new StopName("Slavicie"));
             segments.add(new LineSegment(new TimeDiff(2), nextStop, 3, createLineNameClass("Slavicie"), currentCapacity));
         }
         linesWithSegments.add(new Line(createLineNameClass("bus31"), times, startStop, segments, stopsName));
@@ -107,20 +124,32 @@ public class DataInMemory implements StopsFactoryInterface, LinesFactoryInterfac
         times.add(new Time(43));
         times.add(new Time(63));
         {
-            nextStop = getStopByName("Kramare");
+            nextStop = getStopByName(new StopName("Kramare"));
             currentCapacity = new HashMap<>();
-            for (int i = 0; i < times.size(); i++) {
-                currentCapacity.put(times.get(i), 0);
+            for (Time time : times) {
+                currentCapacity.put(time, 0);
             }
             segments.add(new LineSegment(new TimeDiff(6), nextStop, 3, createLineNameClass("Kramare"), currentCapacity));
 
-            nextStop = getStopByName("ZOO");
+            currentCapacity = new HashMap<>();
+            for (Time time : times) {
+                currentCapacity.put(new Time(time.getTime()+6), 0);
+            }
+            nextStop = getStopByName(new StopName("ZOO"));
             segments.add(new LineSegment(new TimeDiff(5), nextStop, 3, createLineNameClass("ZOO"), currentCapacity));
 
-            nextStop = getStopByName("Botanicka");
+            currentCapacity = new HashMap<>();
+            for (Time time : times) {
+                currentCapacity.put(new Time(time.getTime()+11), 0);
+            }
+            nextStop = getStopByName(new StopName("Botanicka"));
             segments.add(new LineSegment(new TimeDiff(2), nextStop, 3, createLineNameClass("Botanicka"), currentCapacity));
 
-            nextStop = getStopByName("DlheDiely");
+            currentCapacity = new HashMap<>();
+            for (Time time : times) {
+                currentCapacity.put(new Time(time.getTime()+13), 0);
+            }
+            nextStop = getStopByName(new StopName("DlheDiely"));
             segments.add(new LineSegment(new TimeDiff(9), nextStop, 3, createLineNameClass("Dlhe_diely"), currentCapacity));
 
         }
@@ -146,32 +175,51 @@ public class DataInMemory implements StopsFactoryInterface, LinesFactoryInterfac
         times.add(new Time(22));
         times.add(new Time(27));
         {
-            nextStop = getStopByName("Zochova");
+            nextStop = getStopByName(new StopName("Zochova"));
             currentCapacity = new HashMap<>();
-            for (int i = 0; i < times.size(); i++) {
-                currentCapacity.put(times.get(i), 0);
+            for (Time time : times) {
+                currentCapacity.put(time, 0);
             }
             segments.add(new LineSegment(new TimeDiff(5), nextStop, 3, createLineNameClass("Zochova"), currentCapacity));
 
-            nextStop = getStopByName("Aupark");
+            currentCapacity = new HashMap<>();
+            for (Time time : times) {
+                currentCapacity.put(new Time(time.getTime()+5), 0);
+            }
+            nextStop = getStopByName(new StopName("Aupark"));
             segments.add(new LineSegment(new TimeDiff(2), nextStop, 3, createLineNameClass("Aupark"), currentCapacity));
 
-            nextStop = getStopByName("Petrzalka");
+            currentCapacity = new HashMap<>();
+            for (Time time : times) {
+                currentCapacity.put(new Time(time.getTime()+7), 0);
+            }
+            nextStop = getStopByName(new StopName("Petrzalka"));
             segments.add(new LineSegment(new TimeDiff(3), nextStop, 3, createLineNameClass("Petrzalka"), currentCapacity));
 
-            nextStop = getStopByName("Vysehradska");
+            currentCapacity = new HashMap<>();
+            for (Time time : times) {
+                currentCapacity.put(new Time(time.getTime()+10), 0);
+            }
+            nextStop = getStopByName(new StopName("Vysehradska"));
             segments.add(new LineSegment(new TimeDiff(9), nextStop, 3, createLineNameClass("Vysehradska"), currentCapacity));
 
         }
         linesWithSegments.add(new Line(createLineNameClass("bus93"), times, startStop, segments, stopsName));
         //line93 to segments end
+        /*for (StopInterface stop : stops) {
+
+            System.out.println(stop.getName().toString());
+        }
+        System.out.println(stops.toString());*/
     }
     public LineName createLineNameClass(String lineName) {
         return new LineName(lineName);
     }
-    public StopInterface getStopByName(String name) {
-        for (int i = 0; i < stops.size(); i++) {
-            if (stops.get(i).getName().toString().equals(name)) return stops.get(i);
+
+    public StopInterface getStopByName(StopName name) {
+        for (StopInterface stop : stops) {
+
+            if (stop.getName().equals(name)) return stop;
         }
         return null;
     }
@@ -179,8 +227,8 @@ public class DataInMemory implements StopsFactoryInterface, LinesFactoryInterfac
 
     @Override
     public LineInterface getLineByName(LineName lineName) {
-        for (int i = 0; i < linesWithSegments.size(); i++) {
-            if (linesWithSegments.get(i).getName().equals(lineName)) return linesWithSegments.get(i);
+        for (Line linesWithSegment : linesWithSegments) {
+            if (linesWithSegment.getName().equals(lineName)) return linesWithSegment;
         }
         return null;
     }
@@ -193,10 +241,5 @@ public class DataInMemory implements StopsFactoryInterface, LinesFactoryInterfac
     @Override
     public void clearBuffer() {
 
-    }
-
-    @Override
-    public StopInterface getStopByName(StopName name) {
-        return null;
     }
 }

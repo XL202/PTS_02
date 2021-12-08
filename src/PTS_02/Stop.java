@@ -8,9 +8,9 @@ import PTS_02.datatypes.Pair;
 import java.util.LinkedList;
 
 public class Stop implements StopInterface{
-    private StopName name;
+    private final StopName name;
     //private LinkedList<Reachible> reachible;
-    private LinkedList<LineName> lines;
+    private final LinkedList<LineName> lines;
     private Time reachableAt = null;
     private LineName reachableBy = null;
     public Stop(StopName name, LinkedList<LineName> lines) {
@@ -41,7 +41,7 @@ public class Stop implements StopInterface{
             reachableBy = name;
             if (name != null) {
 
-                System.out.printf("Stop: '%s' => Time: %s, LineName: %s, reachableAt: %s, reachableBy: %s\n", this.name, time.getTime(), name.toString(), reachableAt.getTime(), reachableBy.toString());
+                System.out.printf("Stop: '%s' => Time: %s, LineName: %s, reachableAt: %s, reachableBy: %s\n", this.name, time.getTime(), name, reachableAt.getTime(), reachableBy.toString());
             }
 
         }

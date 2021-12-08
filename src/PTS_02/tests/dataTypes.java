@@ -159,4 +159,17 @@ public class dataTypes {
         Quadraplet<StopName, LineName, Time, Time> quadraplet3 = new Quadraplet(new StopName("a"), new LineName("b"), new Time(1), new Time(3));
         assertFalse(quadraplet.equals(quadraplet3));
     }
+
+    @Test
+    public void testConnectionData() {
+        ConnectionData connectionData = new ConnectionData();
+        connectionData.setLastStop(new StopName("Slavicie"));
+        assertEquals(connectionData.getLastStop(), new StopName("Slavicie"));
+
+
+        connectionData.addTravelSegment(new LineName("bus31"), new StopName("Slavicie"), new Time(13), new TimeDiff(2));
+        connectionData.addTravelSegment(new LineName("bus31"), new StopName("ZOO"), new Time(5), new TimeDiff(8));
+        connectionData.addTravelSegment(new LineName("bus93"), new StopName("Zochova"), new Time(0), new TimeDiff(5));
+        System.out.println(connectionData);
+    }
 }

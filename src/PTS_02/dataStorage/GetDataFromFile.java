@@ -47,20 +47,19 @@ public class GetDataFromFile implements StopsFactoryInterface, LinesFactoryInter
     }
     @Override
     public StopInterface getStopByName(StopName name) {
-        for (int i = 0; i < stops.size(); i++) {
-            if (stops.get(i).getName().equals(name)) return stops.get(i);
+        for (StopInterface stop : stops) {
+            if (stop.getName().equals(name)) return stop;
         }
         return null;
     }
     public LinkedList<LineInterface> getLinesData() throws FileNotFoundException {
         LinkedList<LineInterface> tmp = new LinkedList<>();
-        for(int i=0; i< lines.size(); i++) {
-            tmp.add(getLineData(lines.get(i).toString() + ".txt", lines.get(i).toString()));
+        for (LineName line : lines) {
+            tmp.add(getLineData(line.toString() + ".txt", line.toString()));
         }
         return tmp;
     }
     public LineInterface getLineData(String lineFileName, String lineName) throws FileNotFoundException {
-        long lastDiff = 0;
         long currentDiffFromStart;
         TimeDiff diff;
         HashMap<Time,Integer> currentCapacity;
@@ -75,7 +74,6 @@ public class GetDataFromFile implements StopsFactoryInterface, LinesFactoryInter
         LinkedList<LineSegmentInterface> segments = new LinkedList<>();
         startStop = new StopName(header.next());
         LinkedList<Time> times = new LinkedList<>();
-        LinkedList<StopName> stops = new LinkedList<>();
         stopsOnLine = new LinkedList<>();
         stopsOnLine.add(startStop);
         while(header.hasNextLong()) {
@@ -83,7 +81,6 @@ public class GetDataFromFile implements StopsFactoryInterface, LinesFactoryInter
         }
         header.close();
         currentDiffFromStart = 0;
-        lastDiff = 0;
         while(sc.hasNextLine()) {
 
             Scanner row = new Scanner(sc.nextLine());
@@ -95,8 +92,8 @@ public class GetDataFromFile implements StopsFactoryInterface, LinesFactoryInter
 
             int capacity = row.nextInt();
             currentCapacity = new HashMap<>();
-            for (int i = 0; i < times.size(); i++) {
-                currentCapacity.put(new Time(times.get(i).getTime()+currentDiffFromStart), row.nextInt());
+            for (Time time : times) {
+                currentCapacity.put(new Time(time.getTime() + currentDiffFromStart), row.nextInt());
                 //currentCapacity.put(new Time(times.get(i).getTime()+currentDiffFromStart), row.nextInt());
             }
             System.out.println(t + " " + currentDiffFromStart);
@@ -114,7 +111,7 @@ public class GetDataFromFile implements StopsFactoryInterface, LinesFactoryInter
     }
 
     @Override
-    public LineInterface getLineByName(LineName lineName) throws FileNotFoundException {
+    public LineInterface getLineByName(LineName lineName) {
         try {
             return getLineData(lineName.toString() + ".txt" , lineName.toString());
         }

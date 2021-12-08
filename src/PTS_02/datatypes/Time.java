@@ -3,7 +3,7 @@ package PTS_02.datatypes;
 import java.util.Objects;
 
 public class Time implements Comparable<Time> {
-    private long time;
+    private final long time;
     public Time(long time) {
         if (time < 0) throw new IllegalArgumentException("Time cannot be negative.");
         this.time = time;
@@ -17,8 +17,7 @@ public class Time implements Comparable<Time> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Time)) return false;
-        Time time1 = (Time) o;
+        if (!(o instanceof Time time1)) return false;
         return getTime() == time1.getTime();
     }
 

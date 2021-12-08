@@ -10,5 +10,5 @@ public interface LineSegmentInterface {
     Triplet<Time, StopName, Boolean> nextStopAndUpdateReachable(Time startTime);
     void incrementCapacity(Time startTime) throws FullCapacityException;
     TimeDiff getTimeToNextStop();
-    public HashMap<Time, Integer> getUpdatedBusses();
+    HashMap<Time, Integer> getUpdatedBusses();
 }

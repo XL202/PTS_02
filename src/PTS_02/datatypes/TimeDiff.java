@@ -3,7 +3,7 @@ package PTS_02.datatypes;
 import java.util.Objects;
 
 public class TimeDiff {
-    private long diff;
+    private final long diff;
     public TimeDiff(long diff) {
         if (diff < 0) throw new IllegalArgumentException("TimeDiff cannot be negative.");
         this.diff = diff;
@@ -21,8 +21,7 @@ public class TimeDiff {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TimeDiff)) return false;
-        TimeDiff timeDiff = (TimeDiff) o;
+        if (!(o instanceof TimeDiff timeDiff)) return false;
         return diff == timeDiff.diff;
     }
 
