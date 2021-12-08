@@ -28,18 +28,30 @@ public class Stops implements StopsInterface {
     @Override
     public void loadStop(StopName stop) throws IncorrectUserInputException {
         System.out.printf("loading stop '%s'\n",stop);
-        if (stops.containsKey(stop)) throw new IllegalStateException("Stop has already been loaded.");
-        StopInterface newStop = factory.getStopByName(stop);
-        System.out.println("loaded stop: " + newStop.getName());
-        if (newStop == null) throw new IncorrectUserInputException("No such stop in database.");
-        System.out.println("stopname: " + stop + " stop: " + newStop.getName());
-        stops.put(stop, newStop);
+        try {
+            if (stops.containsKey(stop)) throw new IllegalStateException("Stop has already been loaded.");
+            StopInterface newStop = factory.getStopByName(stop);
+            try {
+                if (newStop == null) throw new IncorrectUserInputException("No such stop in database.");
+                System.out.println("loaded stop: " + newStop.getName());
+                System.out.println("---------------------------");
+                stops.put(stop, newStop);
+            }
+            catch (IncorrectUserInputException e) {
+                System.out.println("IncorrectUserInputException: " + e.getMessage());
+            }
+        }
+        catch (IllegalStateException e) {
+            System.out.println("IllegalStateException: " + e.getMessage());
+        }
+
+
     }
     @Override
     public Pair<LinkedList<StopName>, Time> earliestReachableStopAfter(Time time) {
         Time min = new Time(Long.MAX_VALUE);
         for (StopName stop : stops.keySet()) {
-            System.out.println(stop);
+            System.out.println("Stop: " + stop);
             Pair<Time, LineName> data = stops.get(stop).getReachableAt();
             System.out.println(data.getFirst().getTime() + " " + data.getSecond());
             if (data.getFirst().equals(new Time(Long.MAX_VALUE))) continue;

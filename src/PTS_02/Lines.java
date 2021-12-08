@@ -17,19 +17,44 @@ public class Lines implements LinesInterface{
         this.factory = factory;
     }
 
-    private void loadLine(LineName line) throws IncorrectUserInputException, FileNotFoundException {
-        if (lines.containsKey(line)) throw new IllegalStateException("Line has already been loaded.");
 
-        LineInterface newLine = factory.getLineByName(line);
-        System.out.println("loaded line: " + newLine.toString());
-        System.out.println("line's start times: " + newLine.getStartTimes());
-        System.out.println("line's segments" + newLine.getLineSegments());
-        if (newLine == null) throw new IncorrectUserInputException("No such line in database.");
-        lines.put(line, newLine);
-        System.out.println(lines);
+    @Override
+    public void loadLine(LineName line) throws FileNotFoundException {
+
+        try {
+            if (lines.containsKey(line)) throw new IllegalStateException("Line has already been loaded.");
+            try {
+
+                LineInterface newLine = factory.getLineByName(line);
+                if (newLine == null) throw new IncorrectUserInputException("No such line in database.");
+                //System.out.println(newLine.getLineSegments());
+                System.out.println("loaded line: " + newLine.toString());
+                System.out.println("line's start times: " + newLine.getStartTimes());
+                System.out.println("line's segments" + newLine.getLineSegments());
+
+                lines.put(line, newLine);
+                System.out.println(lines);
+
+            }
+            catch (IncorrectUserInputException e) {
+                System.out.println("IllegalStateException: " + e.getMessage());
+            }
+
+        }
+        catch (IllegalStateException e){
+            System.out.println("IllegalStateException: " + e.getMessage());
+        }
+
 
     }
-
+    @Override
+    public boolean isLoaded(LineName line) {
+        return lines.containsKey(line);
+    }
+    @Override
+    public LineInterface getLineByLineName(LineName line) throws FileNotFoundException {
+        return factory.getLineByName(line);
+    }
     @Override
     public void updateReachable(LinkedList<LineName> lines, StopName stop, Time time) throws IncorrectUserInputException, FileNotFoundException {
         System.out.printf("lines.updateReachable(lines,AtStop,Time): [%s, %s, %s]\n",lines.toString(), stop, time.getTime());

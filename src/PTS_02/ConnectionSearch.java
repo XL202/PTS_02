@@ -25,34 +25,39 @@ public class ConnectionSearch {
             stops.setStartingStop(from, time);
 
             LinkedList<StopName> earliestStops = new LinkedList<>(List.of(from));
-            System.out.println(earliestStops);
+            System.out.println("earliest_stops: " + earliestStops);
             while (!earliestStops.contains(to)) {
-                //System.out.println("T1");
                 while (!earliestStops.isEmpty()) {
-                    //System.out.println("T2");
                     StopName tmpStop = earliestStops.removeLast();
                     LinkedList<LineName> stopLines = stops.getLines(tmpStop);
+                    LinkedList<StopName> stopNames;
                     System.out.printf("stops.getLines(tmpStop): [%s, %s]\n", tmpStop.toString(), stopLines);
-                    if (!stops.isLoaded(tmpStop)) stops.loadStop(tmpStop);
+                    for(int i=0; i<stopLines.size(); i++) {
+                        stopNames = lines.getLineByLineName(stopLines.get(i)).getStopsOnThisLine();
+                        for(int j=0; j<stopNames.size(); j++) {
+                            if (!stops.isLoaded(stopNames.get(j))) stops.loadStop(stopNames.get(j));
+                        }
+                    }
 
-                    lines.updateReachable(stopLines, tmpStop, time);
-                    /*LinkedList<StopName> tmp = new LinkedList<>(newLine.getStopsOnThisLine());
-                    for(int i=0; i<tmp.size(); i++) {
-                        stops.gettmp.get(i).
 
-                    };*/
+                    System.out.printf("lines.updateReachable(stopLines, tmpStop, time), %s, %s, %s\n", stopLines, tmpStop, time);
+
+                    //if (tmpStop != from) {
+                        lines.updateReachable(stopLines, tmpStop, time);
+                    //}
+                    /*else for(int i=0; i<stopLines.size(); i++) {
+                        stops.getStop(tmpStop).updateReachableAt();
+                    }*/
                 }
-                //stops.loadStop(new StopName("Zochova"));
-                /*stops.loadStop(new StopName("Aupark"));
-                stops.loadStop(new StopName("Petrzalka"));
-                stops.loadStop(new StopName("Vysehradska"));*/
+
                 Pair<LinkedList<StopName>, Time> data = stops.earliestReachableStopAfter(time);
-                //System.out.println(data);
+                System.out.println("=> " + data.getFirst() + " " + data.getSecond());
                 if (data == null) {
                     System.out.println("No connection has been found");
                     return null;
                 }
                 earliestStops.addAll(data.getFirst());
+                System.out.println(data.getFirst());
                 time = data.getSecond();
             }
 

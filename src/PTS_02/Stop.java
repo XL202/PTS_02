@@ -22,10 +22,6 @@ public class Stop implements StopInterface{
         return name;
     }
 
-    /*public LinkedList<Reachible> getReachible(StopName from) {
-        LinkedList<Reachible> tmp = new LinkedList<>();
-        return tmp;
-    }*/
     @Override
     public LinkedList<LineName> getLines() {
         return lines;

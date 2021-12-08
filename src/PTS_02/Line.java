@@ -51,7 +51,7 @@ public class Line implements LineInterface {
         //update reachable stops from starting lineSegment
         while (startingLineSegmentIndex < lineSegments.size()) {
             //System.out.println(startingLineSegmentIndex);
-            //
+            System.out.println(1);
             Triplet<Time, StopName, Boolean> data = lineSegments.get(startingLineSegmentIndex).nextStopAndUpdateReachable(earliestCatchable);
             if (!data.getThird()) {
                 earliestCatchableIndex++;
@@ -78,18 +78,27 @@ public class Line implements LineInterface {
             startTime = new Time(startTimes.get(i).getTime());
             System.out.printf("start_times: %s\n",startTimes.get(i).getTime());
             for(int j=0; j<lineSegments.size(); j++) {
+
                 //System.out.println(startTime);
-                Pair<Time, StopName> tmp = lineSegments.get(j).nextStop(startTime);
+                /*Pair<Time, StopName> tmp = lineSegments.get(j).nextStop(time);
                 if (tmp.getSecond() == name) {
                     Pair<Time, StopName> data = lineSegments.get(i).nextStop(startTimes.get(i));
                     lineSegments.get(j).incrementCapacity(startTimes.get(i));
+                    lastTimeDiff = new TimeDiff(data.getFirst().getTime() - startTimes.get(i).getTime());
+                    return new Triplet<>(previousStop,time,lastTimeDiff);
+                }*/
+
+                Pair<Time, StopName> tmp = lineSegments.get(j).nextStop(time);
+                if (tmp.getSecond() == name) {
+                    Pair<Time, StopName> data = lineSegments.get(i).nextStop(startTime);
+                    lineSegments.get(j).incrementCapacity(startTime);
                     lastTimeDiff = new TimeDiff(data.getFirst().getTime() - startTimes.get(i).getTime());
                     return new Triplet<>(previousStop,time,lastTimeDiff);
                 }
                 else {
                     previousStop = tmp.getSecond();
                 }
-                startTime = new Time(startTime.getTime() + lineSegments.get(j).getTimeToNextStop().getTimeDiff());
+                startTime = new Time(startTime.getTime() + lineSegments.get(i).getTimeToNextStop().getTimeDiff());
 
             }
         }
@@ -109,5 +118,8 @@ public class Line implements LineInterface {
     }
     public String toString() {
         return lineName.toString();
+    }
+    public LineName getName() {
+        return lineName;
     }
 }

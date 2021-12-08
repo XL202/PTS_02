@@ -1,11 +1,11 @@
-Hl.st.		bus93
+Hl.st.		bus32	bus93
 Blumental	bus31
 Zochova		bus31	bus93
 ZOO		bus31	bus32
 Slavicie
 Kramare		bus32
 Botanicka	bus32
-Dlhe_diely
+DlheDiely
 Aupark		bus93
 Petrzalka	bus93
 Vysehradska	

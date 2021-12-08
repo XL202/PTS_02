@@ -17,9 +17,9 @@ public class LineSegment implements LineSegmentInterface {
     private final HashMap<Time, Integer> numberOfPassengers;
     private final HashMap<Time, Integer> updatedBusses = new HashMap<>();
 
-    public LineSegment(TimeDiff timeToNextStop, StopInterface nextStop, int capacity, LineName lineName, HashMap<Time, Integer> numberOfPassengers) {
+    public LineSegment(TimeDiff timeInEndOfSegment, StopInterface nextStop, int capacity, LineName lineName, HashMap<Time, Integer> numberOfPassengers) {
         if (capacity < 0) throw new IllegalArgumentException("Capacity cannot be negative.");
-        this.timeToNextStop = timeToNextStop;
+        this.timeToNextStop = timeInEndOfSegment;
         //this.timeDifferenceFromStart = timeDiffFromStart;
         this.nextStop = nextStop;
         this.capacity = capacity;
@@ -28,37 +28,57 @@ public class LineSegment implements LineSegmentInterface {
     }
 
     @Override
-    public Pair<Time, StopName> nextStop(Time startTimeOfSegment) {
+    public Pair<Time, StopName> nextStop(Time startTime) {
+        System.out.println("time_inLS: " + startTime.getTime());
         //startTimeOfSegment - returns endSegmentTime
         //System.out.println(numberOfPassengers);
-        //System.out.println(startTimeOfSegment.getTime());
-        if (!numberOfPassengers.containsKey(startTimeOfSegment)) throw new NoSuchElementException("No match for bus at startTime.");
-        Time time = new Time(timeToNextStop.getTimeDiff() + startTimeOfSegment.getTime());
+        //
+        try {
+            if (!numberOfPassengers.containsKey(startTime)) throw new NoSuchElementException("No match for bus at startTime.");
+        }
+        catch (NoSuchElementException e) {
+            System.out.println("NoSuchElementException " + e.getMessage());
+        }
+        Time time = new Time(timeToNextStop.getTimeDiff() + startTime.getTime());
         return new Pair<>(time, nextStop.getName());
     }
 
     @Override
-    public Triplet<Time, StopName, Boolean> nextStopAndUpdateReachable(Time startTime) {
-        System.out.println("StartTimeInNextStop: " + startTime.getTime());
-        if (!numberOfPassengers.containsKey(startTime)) throw new NoSuchElementException("No match for bus at startTime.");
-        boolean isFree = numberOfPassengers.get(startTime) +1 <= capacity;
-        Time time = new Time(timeToNextStop.getTimeDiff() + startTime.getTime());
-        System.out.println("nextStop.updateReachableAt(time, lineName): " + nextStop.getName() + " " + time.getTime() + " " + lineName.toString());
-        if (isFree) {
-            System.out.println(true + " " + lineName + " " + time);
-            nextStop.updateReachableAt(time, lineName);
+    public Triplet<Time, StopName, Boolean> nextStopAndUpdateReachable(Time endTimeOfSegment) {
+        System.out.println("StartTimeInNextStop: " + endTimeOfSegment.getTime());
+        System.out.println(numberOfPassengers);
+        try {
+            if (!numberOfPassengers.containsKey(endTimeOfSegment)) throw new NoSuchElementException("No match for bus at startTime.");
+            boolean isFree = numberOfPassengers.get(endTimeOfSegment) +1 <= capacity;
+            Time time = new Time(timeToNextStop.getTimeDiff() + endTimeOfSegment.getTime());
+            System.out.println("nextStop.updateReachableAt(time, lineName): " + nextStop.getName() + " " + time.getTime() + " " + lineName.toString());
+            if (isFree) {
+                System.out.println(" " + lineName + " " + time);
+                nextStop.updateReachableAt(time, lineName);
+            }
+            return new Triplet<>(time, nextStop.getName(), isFree);
         }
-        return new Triplet<>(time, nextStop.getName(), isFree);
+        catch (NoSuchElementException e) {
+            System.out.println("NoSuchElementException: " + e.getMessage());
+        }
+
+        return null;
     }
 
     @Override
-    public void incrementCapacity(Time startTime) throws FullCapacityException {
-        if (!numberOfPassengers.containsKey(startTime)) throw new NoSuchElementException("No match for bus at startTime.");
-        if (numberOfPassengers.get(startTime) + 1 > capacity) throw new FullCapacityException();
-        numberOfPassengers.put(startTime, numberOfPassengers.get(startTime) + 1);
-        updatedBusses.put(startTime, numberOfPassengers.get(startTime));
+    public void incrementCapacity(Time endTime) throws FullCapacityException {
+        System.out.println("time_in_LS: " + endTime.toString());
+        if (!numberOfPassengers.containsKey(endTime)) throw new NoSuchElementException("No match for bus at startTime.");
+        if (numberOfPassengers.get(endTime) + 1 > capacity) throw new FullCapacityException();
+        numberOfPassengers.put(endTime, numberOfPassengers.get(endTime) + 1);
+        updatedBusses.put(endTime, numberOfPassengers.get(endTime));
     }
 
+    public boolean isPossibleToIncrementCapacity(Time endTime) {
+        if (!numberOfPassengers.containsKey(endTime)) throw new NoSuchElementException("No match for bus at startTime.");
+        if (numberOfPassengers.get(endTime) + 1 > capacity) return false;
+        else return true;
+    }
     public TimeDiff getTimeToNextStop() {
         return timeToNextStop;
     }
@@ -66,6 +86,7 @@ public class LineSegment implements LineSegmentInterface {
         return updatedBusses;
     }
     public String toString() {
-        return "[TimeToNextStop: " + timeToNextStop.getTimeDiff() + "; NextStop: " + nextStop.getName() + "; Capacity:" + capacity + "; LineName: " + lineName.toString() + "; NumberOfPassangers: "+ numberOfPassengers.toString() + "]";
+
+        return "[TimeToNextStop: " + timeToNextStop.getTimeDiff() + "; NextStop: " + nextStop.getName() + "; Capacity:" + capacity + "; LineName: " + lineName.toString() + "; NumberOfPassangers: "+ numberOfPassengers.toString() + "]\n";
     }
 }

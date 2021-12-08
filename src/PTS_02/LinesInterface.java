@@ -13,4 +13,7 @@ public interface LinesInterface {
     void clean();
     void updateSegment(LineName lineName, int index);
     public void saveUpdatedLineSegments();
+    public LineInterface getLineByLineName(LineName line) throws FileNotFoundException;
+    public boolean isLoaded(LineName line);
+    void loadLine(LineName line) throws IncorrectUserInputException, FileNotFoundException;
 }

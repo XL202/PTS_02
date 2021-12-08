@@ -5,11 +5,18 @@ import java.util.Objects;
 public class TimeDiff {
     private long diff;
     public TimeDiff(long diff) {
-            this.diff = diff;
+        if (diff < 0) throw new IllegalArgumentException("TimeDiff cannot be negative.");
+        this.diff = diff;
+    }
+    public TimeDiff(long time1, long time2) {
+        if (time1 < 0) throw new IllegalArgumentException("Time cannot be negative.");
+        if (time2 < 0) throw new IllegalArgumentException("Time cannot be negative.");
+        if (time1 - time2 < 0) throw new IllegalArgumentException("TimeDiff cannot be negative.");
+        diff = time1 - time2;
     }
     public long getTimeDiff() {
             return diff;
-        }
+    }
 
     @Override
     public boolean equals(Object o) {
