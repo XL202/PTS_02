@@ -11,7 +11,9 @@ public class Time implements Comparable<Time> {
     public long getTime() {
         return time;
     }
-
+    public String toString() {
+        return Long.toString(time);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

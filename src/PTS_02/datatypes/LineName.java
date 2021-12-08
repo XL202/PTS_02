@@ -16,7 +16,7 @@ public class LineName {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof StopName)) return false;
+        if (!(o instanceof LineName)) return false;
         LineName lineName1 = (LineName) o;
         return Objects.equals(lineName, lineName1.lineName);
     }

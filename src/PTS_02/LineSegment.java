@@ -30,6 +30,8 @@ public class LineSegment implements LineSegmentInterface {
     @Override
     public Pair<Time, StopName> nextStop(Time startTimeOfSegment) {
         //startTimeOfSegment - returns endSegmentTime
+        //System.out.println(numberOfPassengers);
+        //System.out.println(startTimeOfSegment.getTime());
         if (!numberOfPassengers.containsKey(startTimeOfSegment)) throw new NoSuchElementException("No match for bus at startTime.");
         Time time = new Time(timeToNextStop.getTimeDiff() + startTimeOfSegment.getTime());
         return new Pair<>(time, nextStop.getName());
@@ -37,10 +39,15 @@ public class LineSegment implements LineSegmentInterface {
 
     @Override
     public Triplet<Time, StopName, Boolean> nextStopAndUpdateReachable(Time startTime) {
+        System.out.println("StartTimeInNextStop: " + startTime.getTime());
         if (!numberOfPassengers.containsKey(startTime)) throw new NoSuchElementException("No match for bus at startTime.");
         boolean isFree = numberOfPassengers.get(startTime) +1 <= capacity;
         Time time = new Time(timeToNextStop.getTimeDiff() + startTime.getTime());
-        if (isFree) nextStop.updateReachableAt(time, lineName);
+        System.out.println("nextStop.updateReachableAt(time, lineName): " + nextStop.getName() + " " + time.getTime() + " " + lineName.toString());
+        if (isFree) {
+            System.out.println(true + " " + lineName + " " + time);
+            nextStop.updateReachableAt(time, lineName);
+        }
         return new Triplet<>(time, nextStop.getName(), isFree);
     }
 
@@ -57,5 +64,8 @@ public class LineSegment implements LineSegmentInterface {
     }
     public HashMap<Time, Integer> getUpdatedBusses() {
         return updatedBusses;
+    }
+    public String toString() {
+        return "[TimeToNextStop: " + timeToNextStop.getTimeDiff() + "; NextStop: " + nextStop.getName() + "; Capacity:" + capacity + "; LineName: " + lineName.toString() + "; NumberOfPassangers: "+ numberOfPassengers.toString() + "]";
     }
 }

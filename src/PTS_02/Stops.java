@@ -17,22 +17,31 @@ public class Stops implements StopsInterface {
 
     @Override
     public boolean setStartingStop(StopName stop, Time time) throws IncorrectUserInputException {
-        if (!stops.containsKey(stop)) loadStop(stop);
+        if (!stops.containsKey(stop)) {
+            System.out.println("Stops.notContainsKey(stop): " + stop);
+            loadStop(stop);
+        }
+        System.out.printf("stops.get(stop).update.reachableAt(time,name) [%s,%s,null]\n", stop, time.getTime());
         stops.get(stop).updateReachableAt(time, null);
         return false;
     }
     @Override
     public void loadStop(StopName stop) throws IncorrectUserInputException {
+        System.out.printf("loading stop '%s'\n",stop);
         if (stops.containsKey(stop)) throw new IllegalStateException("Stop has already been loaded.");
         StopInterface newStop = factory.getStopByName(stop);
+        System.out.println("loaded stop: " + newStop.getName());
         if (newStop == null) throw new IncorrectUserInputException("No such stop in database.");
+        System.out.println("stopname: " + stop + " stop: " + newStop.getName());
         stops.put(stop, newStop);
     }
     @Override
     public Pair<LinkedList<StopName>, Time> earliestReachableStopAfter(Time time) {
         Time min = new Time(Long.MAX_VALUE);
         for (StopName stop : stops.keySet()) {
+            System.out.println(stop);
             Pair<Time, LineName> data = stops.get(stop).getReachableAt();
+            System.out.println(data.getFirst().getTime() + " " + data.getSecond());
             if (data.getFirst().equals(new Time(Long.MAX_VALUE))) continue;
 
             Time reachable = data.getFirst();
@@ -47,6 +56,7 @@ public class Stops implements StopsInterface {
             Pair<Time, LineName> data = stops.get(stop).getReachableAt();
             if (data.getFirst().equals(min)) earliestReachableStops.add(stop);
         }
+        System.out.printf("ear: %s, %s \n", earliestReachableStops,min);
         return new Pair<>(earliestReachableStops, min);
     }
 
@@ -62,14 +72,14 @@ public class Stops implements StopsInterface {
     }
 
     @Override
-    public StopInterface getStop(StopName stop) {
-        if (!stops.containsKey(stop)) throw new NoSuchElementException("Stop has not been loaded yet.");
+    public StopInterface getStop(StopName stop) throws IncorrectUserInputException {
+        if (!stops.containsKey(stop)) loadStop(stop);//throw new NoSuchElementException("Stop has not been loaded yet.");
         return stops.get(stop);
     }
 
     @Override
-    public Pair<Time, LineName> getReachableAt(StopName stop) {
-        if (!stops.containsKey(stop)) throw new IllegalStateException("Stop has not been loaded yet.");
+    public Pair<Time, LineName> getReachableAt(StopName stop) throws IncorrectUserInputException {
+        if (!stops.containsKey(stop)) loadStop(stop);//throw new IllegalStateException("Stop has not been loaded yet.");
         return stops.get(stop).getReachableAt();
     }
 

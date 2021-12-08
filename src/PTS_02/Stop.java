@@ -39,9 +39,15 @@ public class Stop implements StopInterface{
     @Override
     public void updateReachableAt(Time time, LineName name) {
         if (time == null) throw new IllegalArgumentException("Time cannot be null.");
-        if (time.compareTo(reachableAt) < 0) {
+        if (reachableAt == null || time.compareTo(reachableAt) < 0) {
+
             reachableAt = time;
             reachableBy = name;
+            if (name != null) {
+
+                System.out.printf("Stop: '%s' => Time: %s, LineName: %s, reachableAt: %s, reachableBy: %s\n", this.name, time.getTime(), name.toString(), reachableAt.getTime(), reachableBy.toString());
+            }
+
         }
     }
 }

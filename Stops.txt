@@ -1,3 +1,4 @@
+Hl.st.		bus93
 Blumental	bus31
 Zochova		bus31	bus93
 ZOO		bus31	bus32

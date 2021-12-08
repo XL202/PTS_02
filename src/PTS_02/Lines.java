@@ -4,6 +4,7 @@ import PTS_02.datatypes.*;
 import PTS_02.exceptions.FullCapacityException;
 import PTS_02.exceptions.IncorrectUserInputException;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -16,26 +17,40 @@ public class Lines implements LinesInterface{
         this.factory = factory;
     }
 
-    private void loadLine(LineName line) throws IncorrectUserInputException {
+    private void loadLine(LineName line) throws IncorrectUserInputException, FileNotFoundException {
         if (lines.containsKey(line)) throw new IllegalStateException("Line has already been loaded.");
+
         LineInterface newLine = factory.getLineByName(line);
+        System.out.println("loaded line: " + newLine.toString());
+        System.out.println("line's start times: " + newLine.getStartTimes());
+        System.out.println("line's segments" + newLine.getLineSegments());
         if (newLine == null) throw new IncorrectUserInputException("No such line in database.");
         lines.put(line, newLine);
+        System.out.println(lines);
+
     }
 
     @Override
-    public void updateReachable(LinkedList<LineName> lines, StopName stop, Time time) throws IncorrectUserInputException {
+    public void updateReachable(LinkedList<LineName> lines, StopName stop, Time time) throws IncorrectUserInputException, FileNotFoundException {
+        System.out.printf("lines.updateReachable(lines,AtStop,Time): [%s, %s, %s]\n",lines.toString(), stop, time.getTime());
         for (LineName line : lines) {
-            if (!this.lines.containsKey(line)) loadLine(line);
+            System.out.printf("loading line '%s'\n",line.toString());
+            if (!this.lines.containsKey(line)) {
+
+                loadLine(line);
+            }
+            System.out.printf("lines.get(line).updateReachable(time, stop): [%s, %s, %s]\n",line,time.getTime(),stop);
+
             this.lines.get(line).updateReachable(time, stop);
         }
     }
 
     @Override
-    public Triplet<StopName, Time, TimeDiff> updateCapacityAndGetPreviousStop(LineName line, StopName stop, Time busStartTime) throws FullCapacityException {
-        if (!lines.containsKey(line)) throw new NoSuchElementException("Line has not been loaded yet.");
-        //return lines.get(line).updateCapacityAndGetPreviousStop(stop, busStartTime);
-        return new Triplet<>(null,null,null);
+    public Triplet<StopName, Time, TimeDiff> updateCapacityAndGetPreviousStop(LineName line, StopName stop, Time busStartTime) throws FullCapacityException, IncorrectUserInputException, FileNotFoundException {
+
+        if (!lines.keySet().contains(line)) throw new NoSuchElementException("Line has not been loaded yet.");
+        System.out.println("OK");
+        return lines.get(line).updateCapacityAndGetPreviousStop(stop, busStartTime);
     }
 
     @Override

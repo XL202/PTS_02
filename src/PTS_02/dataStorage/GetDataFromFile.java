@@ -21,6 +21,7 @@ public class GetDataFromFile implements StopsFactoryInterface, LinesFactoryInter
         lines = getLineNames(linesSetName);
         stops = getStops(stopSetName);
     }
+
     public LinkedList<LineName> getLineNames(String filename) throws FileNotFoundException {
         File file = new File(filename);
         Scanner sc = new Scanner(file);
@@ -55,14 +56,14 @@ public class GetDataFromFile implements StopsFactoryInterface, LinesFactoryInter
         }
         return null;
     }
-    public LinkedList<Line> getLinesData() throws FileNotFoundException {
-        LinkedList<Line> tmp = new LinkedList<>();
+    public LinkedList<LineInterface> getLinesData() throws FileNotFoundException {
+        LinkedList<LineInterface> tmp = new LinkedList<>();
         for(int i=0; i< lines.size(); i++) {
             tmp.add(getLineData(lines.get(i).toString() + ".txt", lines.get(i).toString()));
         }
         return tmp;
     }
-    public Line getLineData(String lineFileName, String lineName) throws FileNotFoundException {
+    public LineInterface getLineData(String lineFileName, String lineName) throws FileNotFoundException {
         Line line;
         File file = new File(lineFileName);
         Scanner sc = new Scanner(file);
@@ -73,7 +74,8 @@ public class GetDataFromFile implements StopsFactoryInterface, LinesFactoryInter
         LinkedList<LineSegmentInterface> segments = new LinkedList<>();
         startStop = new StopName(header.next());
         LinkedList<Time> times = new LinkedList<>();
-
+        LinkedList<StopName> stops = new LinkedList<>();
+        stops.add(startStop);
         while(header.hasNextLong()) {
             times.add(new Time(header.nextLong()));
         }
@@ -87,20 +89,22 @@ public class GetDataFromFile implements StopsFactoryInterface, LinesFactoryInter
             int capacity = row.nextInt();
             currentCapacity = new HashMap<>();
             for (int i = 0; i < times.size(); i++) {
-                currentCapacity.put(times.get(i), row.nextInt());
+                currentCapacity.put(new Time(times.get(i).getTime()+lastDiffFromStart), row.nextInt());
             }
+            lastDiffFromStart = currentDiffFromStart;
+            stops.add(nextStop.getName());
             segments.add(new LineSegment(diff, nextStop, capacity, new LineName(lineName), currentCapacity));
         }
 //LineName lineName, LinkedList<Time> startTimes, StopName startStop, LinkedList<LineSegmentInterface> lineSegments
-        line = new Line(new LineName(lineName), times, startStop, segments);
+        line = new Line(new LineName(lineName), times, startStop, segments, stops);
         sc.close();
 
         return line;
     }
 
     @Override
-    public LineInterface getLineByName(LineName lineName) {
-        return null;
+    public LineInterface getLineByName(LineName lineName) throws FileNotFoundException {
+        return getLineData(lineName.toString() + ".txt" , lineName.toString());
     }
 
     @Override

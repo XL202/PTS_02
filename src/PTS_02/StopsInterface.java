@@ -19,9 +19,9 @@ public interface StopsInterface {
 
     boolean isLoaded(StopName stop);
 
-    StopInterface getStop(StopName stop);
+    StopInterface getStop(StopName stop) throws IncorrectUserInputException;
 
-    Pair<Time, LineName> getReachableAt(StopName stop);
+    Pair<Time, LineName> getReachableAt(StopName stop) throws IncorrectUserInputException;
 
     void clean();
 

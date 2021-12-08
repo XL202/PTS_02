@@ -7,11 +7,11 @@ import java.util.LinkedList;
 
 public class LinesGenerating implements LinesFactoryInterface{
 
-    private LinkedList<Quadraplet<LineName, LinkedList<Time>, StopName, LinkedList<LineSegmentInterface>>> lines;
+    private LinkedList<Pentaplet<LineName, LinkedList<Time>, StopName, LinkedList<LineSegmentInterface>, LinkedList<StopName>>> lines;
     private HashMap<LineName, LinkedList<LineSegment>> lineSegments;
     private StopsInterface stops;
 
-    public LinesGenerating(StopsInterface stops, LinkedList<Quadraplet<LineName, LinkedList<Time>, StopName, LinkedList<LineSegmentInterface>>> lines)
+    public LinesGenerating(StopsInterface stops, LinkedList<Pentaplet<LineName, LinkedList<Time>, StopName, LinkedList<LineSegmentInterface>, LinkedList<StopName>>> lines)
     {
         this.stops = stops;
         lineSegments = new HashMap<>();
@@ -19,10 +19,10 @@ public class LinesGenerating implements LinesFactoryInterface{
     }
     @Override
     public LineInterface getLineByName(LineName lineName) {
-        for (Quadraplet<LineName, LinkedList<Time>, StopName, LinkedList<LineSegmentInterface>> line : lines) {
+        for (Pentaplet<LineName, LinkedList<Time>, StopName, LinkedList<LineSegmentInterface>, LinkedList<StopName>> line : lines) {
             if(line.getFirst().equals(lineName))
             {
-                return new Line(line.getFirst(), line.getSecond(), line.getThird(), line.getFourth());
+                return new Line(line.getFirst(), line.getSecond(), line.getThird(), line.getFourth(), line.getFifth());
             }
         }
         return null;

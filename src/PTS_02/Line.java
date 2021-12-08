@@ -12,13 +12,15 @@ public class Line implements LineInterface {
     private LinkedList<Time> startTimes;
     private StopName startStop;
     private LinkedList<LineSegmentInterface> lineSegments;
-    public Line(LineName lineName, LinkedList<Time> startTimes, StopName startStop, LinkedList<LineSegmentInterface> lineSegments) {
+    private LinkedList<StopName> stopsOnThisLine;
+    public Line(LineName lineName, LinkedList<Time> startTimes, StopName startStop, LinkedList<LineSegmentInterface> lineSegments, LinkedList<StopName> stopsOnThisLine) {
         if (startTimes.size() == 0) throw new IllegalArgumentException("Line must have at least one bus.");
         if (lineSegments.size() == 0) throw new IllegalArgumentException("Line must have at least one segment.");
         this.startTimes = new LinkedList<>(startTimes);
         this.lineName = lineName;
         this.startStop = startStop;
         this.lineSegments = new LinkedList<>(lineSegments);
+        this.stopsOnThisLine = new LinkedList<>(stopsOnThisLine);
     }
 
 
@@ -44,42 +46,68 @@ public class Line implements LineInterface {
             earliestCatchable = new Time(startTimes.get(i).getTime() + totalTimeDiff.getTimeDiff());
             earliestCatchableIndex++;
         }
-
+        System.out.println("earliestCatchableIndex: "+ earliestCatchableIndex);
+        System.out.println("earliestCatchable: "+ earliestCatchable.getTime());
         //update reachable stops from starting lineSegment
         while (startingLineSegmentIndex < lineSegments.size()) {
+            //System.out.println(startingLineSegmentIndex);
+            //
             Triplet<Time, StopName, Boolean> data = lineSegments.get(startingLineSegmentIndex).nextStopAndUpdateReachable(earliestCatchable);
             if (!data.getThird()) {
                 earliestCatchableIndex++;
                 if (earliestCatchableIndex >= startTimes.size()) return;
                 TimeDiff waitForNextBus = new TimeDiff(startTimes.get(earliestCatchableIndex).getTime() - startTimes.get(earliestCatchableIndex-1).getTime());
+                System.out.println("next bus diff: " + waitForNextBus.getTimeDiff());
                 earliestCatchable = new Time(earliestCatchable.getTime() + waitForNextBus.getTimeDiff());
                 continue;
             }
-            earliestCatchable = data.getFirst();
-            startingLineSegmentIndex++;
+                earliestCatchable = data.getFirst();
+                startingLineSegmentIndex++;
+
+
         }
     }
 
     @Override
-    public StopName updateCapacityAndGetPreviousStop(StopName name, Time time) throws FullCapacityException {
-      /*  if (name.equals(startStop)) throw new NoSuchElementException("Entered stop is first stop!");
+    public Triplet<StopName, Time, TimeDiff> updateCapacityAndGetPreviousStop(StopName name, Time time) throws FullCapacityException {
+        if (name.equals(startStop)) throw new NoSuchElementException("Entered stop is first stop!");
         StopName previousStop = startStop;
+        Time startTime;
+        TimeDiff lastTimeDiff = new TimeDiff(0);
         for(int i=0; i<startTimes.size(); i++) {
+            startTime = new Time(startTimes.get(i).getTime());
+            System.out.printf("start_times: %s\n",startTimes.get(i).getTime());
             for(int j=0; j<lineSegments.size(); j++) {
-                Pair<Time, StopName> tmp = lineSegments.get(j).nextStop(startTimes.get(i));
+                //System.out.println(startTime);
+                Pair<Time, StopName> tmp = lineSegments.get(j).nextStop(startTime);
                 if (tmp.getSecond() == name) {
+                    Pair<Time, StopName> data = lineSegments.get(i).nextStop(startTimes.get(i));
                     lineSegments.get(j).incrementCapacity(startTimes.get(i));
-                    return previousStop;
+                    lastTimeDiff = new TimeDiff(data.getFirst().getTime() - startTimes.get(i).getTime());
+                    return new Triplet<>(previousStop,time,lastTimeDiff);
                 }
                 else {
                     previousStop = tmp.getSecond();
                 }
+                startTime = new Time(startTime.getTime() + lineSegments.get(j).getTimeToNextStop().getTimeDiff());
+
             }
-        }*/
-        return null;
+        }
+        return new Triplet<>(previousStop,time,lastTimeDiff);
     }
     @Override
     public LinkedList<LineSegmentInterface> getLineSegments() {
         return lineSegments;
+    }
+    @Override
+    public LinkedList<Time> getStartTimes() {
+        return startTimes;
+    }
+    @Override
+    public LinkedList<StopName> getStopsOnThisLine() {
+        return stopsOnThisLine;
+    }
+    public String toString() {
+        return lineName.toString();
     }
 }
